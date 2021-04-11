@@ -1,0 +1,327 @@
+swagger: '2.0'
+info:
+  version: 2.4.0
+  title: (Template) API of Things
+  description: |
+    Some description here of the full API
+
+    GitHub Flavored Markdown can be used for rich text representation,
+        such as **bold**, *italic* and [links](https://swagger.io).
+        
+x-serviceDomain: Domain of Things
+host: apis.dnb.no
+basePath: /v1
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+  X-DNBAPI-Trace-Id:
+    name: X-DNBAPI-Trace-Id
+    in: header
+    required: true
+    type: string
+    description: |-
+      UUID (Universally Unique Identifier) version 4
+
+      Custom correlation-id to be able to correlate request / response. By logging this value on the client,
+      server and any backing services, it provides a mechanism to trace, diagnose and debug requests.
+    minLength: 36
+    maxLength: 36
+    pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+    x-example: 64d16ca4-582a-416e-90d0-e39246b59399
+  X-DNBAPI-CustomHeader1:
+    name: X-DNBAPI-CustomHeader
+    in: header
+    description: Required custom header described
+    required: true
+    type: string
+  X-DNBAPI-CustomHeader2:
+    name: X-DNBAPI-CustomHeader2
+    in: header
+    description: Optional custom header described
+    required: false
+    type: string
+responses:
+  '400':
+    description: Bad Request
+    schema:
+      $ref: '#/definitions/ErrorResponse'
+    headers:
+      X-DNBAPI-Trace-Id:
+        type: string
+        minLength: 36
+        maxLength: 36
+        pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+  '500':
+    description: Internal server error
+    schema:
+      $ref: '#/definitions/ErrorResponse'
+    headers:
+      X-DNBAPI-Trace-Id:
+        type: string
+        minLength: 36
+        maxLength: 36
+        pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+paths:
+  /things:
+    get:
+      summary: 'Short summary of the API Operation: ex: Get all things'
+      description: |
+        Description goes HERE
+
+        DNB naming convention: Root resource of API = Name of API.
+        Example: http://api.dnb.no/v1/accounts/ = Accounts API
+      parameters:
+        - $ref: '#/parameters/X-DNBAPI-Trace-Id'
+        - $ref: '#/parameters/X-DNBAPI-CustomHeader1'
+        - $ref: '#/parameters/X-DNBAPI-CustomHeader2'
+        - name: field1
+          in: query
+          description: Query string parameter to narrow the list of things based on field1 value.
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: array
+            description: Array of things
+            items:
+              $ref: '#/definitions/Thing'
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+        '400':
+          $ref: '#/responses/400'
+        '500':
+          $ref: '#/responses/500'
+    post:
+      summary: 'Short summary of the API Operation: ex: Create one thing'
+      description: |
+        Description goes HERE
+      parameters:
+        - $ref: '#/parameters/X-DNBAPI-Trace-Id'
+        - $ref: '#/parameters/X-DNBAPI-CustomHeader1'
+        - $ref: '#/parameters/X-DNBAPI-CustomHeader2'
+        - name: body
+          in: body
+          description: Description goes HERE
+          schema:
+            $ref: '#/definitions/PostThingRequest'
+      responses:
+        '201':
+          description: |
+            Successfully created.
+
+            Returns the newly created Thing.
+          schema:
+            $ref: '#/definitions/Thing'
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+        '400':
+          $ref: '#/responses/400'
+        '500':
+          $ref: '#/responses/500'
+  '/things/{thingId}':
+    get:
+      summary: 'Short summary of the API Operation: ex: Get one thing by objectId'
+      description: |
+        Description goes HERE
+      parameters:
+        - $ref: '#/parameters/X-DNBAPI-Trace-Id'
+        - $ref: '#/parameters/X-DNBAPI-CustomHeader1'
+        - $ref: '#/parameters/X-DNBAPI-CustomHeader2'
+      responses:
+        '200':
+          description: |
+            Success
+          schema:
+            $ref: '#/definitions/Thing'
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+        '400':
+          $ref: '#/responses/400'
+        '500':
+          $ref: '#/responses/500'
+    delete:
+      summary: 'Short summary of the API Operation: ex: Delete one thing by objectId'
+      description: |
+        Description goes HERE
+      parameters:
+        - $ref: '#/parameters/X-DNBAPI-Trace-Id'
+        - $ref: '#/parameters/X-DNBAPI-CustomHeader1'
+        - $ref: '#/parameters/X-DNBAPI-CustomHeader2'
+      responses:
+        '204':
+          description: |
+            Successfully deleted.
+
+            Alternatively: if the use case requires some information to be returned on delete.
+            Use HTTP 200 and include a response payload as needed.
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+        '400':
+          $ref: '#/responses/400'
+        '500':
+          $ref: '#/responses/500'
+    patch:
+      summary: 'Short summary of the API Operation: ex: Update one thing by objectId'
+      description: |
+        Description goes HERE
+      parameters:
+        - $ref: '#/parameters/X-DNBAPI-Trace-Id'
+        - $ref: '#/parameters/X-DNBAPI-CustomHeader1'
+        - $ref: '#/parameters/X-DNBAPI-CustomHeader2'
+        - name: body
+          in: body
+          description: Description goes HERE
+          schema:
+            $ref: '#/definitions/PatchThingRequest'
+      responses:
+        '200':
+          description: |
+            Successfully updated.
+
+            Returns the updated Thing.
+          schema:
+            $ref: '#/definitions/Thing'
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+        '400':
+          $ref: '#/responses/400'
+        '500':
+          $ref: '#/responses/500'
+    parameters:
+      - name: thingId
+        in: path
+        required: true
+        type: string
+        description: ID defining a specific Thing.
+definitions:
+  ThingBase:
+    type: object
+    description: |
+      The ThingBase object represents a common set of fields that are used in other objects.
+      The base object itself is not meant to be returned from the API.
+    properties:
+      field1:
+        type: string
+        description: Description of field goes HERE
+      field2:
+        type: integer
+        description: Description of field goes HERE
+      field3:
+        type: number
+        description: Description of field goes HERE
+      field4:
+        type: string
+        description: Description of field goes HERE
+        enum:
+          - VAL1
+          - VAL2
+          - VAL3
+  Thing:
+    type: object
+    description: |
+      Thing is inherited from ThingBase and adds several new fields. Required fields are those that are always set
+      when object is returned to the client
+    required:
+      - thingId
+      - field1
+      - field2
+      - field5
+    allOf:
+      - $ref: '#/definitions/ThingBase'
+      - type: object
+        properties:
+          thingId:
+            type: string
+            description: Thing identifier
+          field5:
+            type: string
+            format: date
+            example: '1999-04-15'
+            description: Description goes HERE
+  PostThingRequest:
+    type: object
+    description: |
+      PostThingRequest object is also inherited from the ThingBase object and only marks some fields as required
+    required:
+      - field1
+      - field2
+    allOf:
+      - $ref: '#/definitions/ThingBase'
+  PatchThingRequest:
+    type: object
+    description: Description goes HERE
+    properties:
+      field2:
+        type: string
+        description: Description goes HERE
+      field3:
+        type: string
+        description: Description goes HERE
+  ErrorResponse:
+    type: object
+    description: |
+      Object representing error on this API, with optional additional information from backend systems
+      for help in debugging/logging.
+    required:
+      - statusCode
+      - message
+    properties:
+      statusCode:
+        type: string
+        description: |
+          Error code (determined on this API service): Any Errorcode important enough to need handling by consumer
+          should be promotoed to a specific status code value and shown in this field.
+      message:
+        type: string
+        description: Readable message associated with statuscode.
+      backendInfo:
+        type: array
+        description: |
+          Error responses from backend systems. This data is optional and can not be considered as always present.
+          Any errors that need custom handling should be promotoed to the required statusCode field
+        items:
+          $ref: '#/definitions/BackendResponse'
+  BackendResponse:
+    type: object
+    description: |
+      Error information from the backend system consumed by the service providing this API.
+    properties:
+      endPointUrl:
+        type: string
+        description: URL of endpoint giving the error
+      statusCode:
+        type: string
+        description: Error code of backend system
+      message:
+        type: string
+        description: Descriptive message to complemented the (sometime cryptic) backend error code.
+securityDefinitions:
+  basic:
+    type: basic
+    description: Basic HTTP Authentication
