@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
-  version: 2.4.0
-  title: (Template) API of Things
+  version: 1.0.0
+  title: <insert your name>´s API of Things
   description: |
     Some description here of the full API
 
