@@ -3,7 +3,7 @@ swagger: "2.0"
 info:
   description: "Some description here of the full API\n\nGitHub Flavored Markdown can be used for rich text representation,\n    such as **bold**, *italic* and [links](https://swagger.io).\n    \n    \n# Useful links for the tasks:\n\n* **[REST Design Guidelines V4](https://confluence.tech.dnb.no/pages/viewpage.action?pageId=33488367)**\n\n* **[SwaggerHub Way of Work](https://confluence.tech.dnb.no/display/KKO/SwaggerHub%3A+REST+API+Design+tool\\#SwaggerHub:RESTAPIDesigntool-WayofWork)**\n    \n"
   version: 1.1.0
-  title: Filip´s API of Things
+  title: Filip´s API of Things changed in github.com
 host: apis.dnb.no
 basePath: /v1
 schemes:
