@@ -1,6 +1,6 @@
 # swagger-client
 
-Filip´s API of Things - forked
+Petter&#39;s forked version of Filip´s API of Things
 - API version: 1.1.0
 
 Some description here of the full API  GitHub Flavored Markdown can be used for rich text representation,     such as **bold**, *italic* and [links](https://swagger.io).           # Useful links for the tasks:  * **[REST Design Guidelines V4](https://confluence.tech.dnb.no/pages/viewpage.action?pageId=33488367)**  * **[SwaggerHub Way of Work](https://confluence.tech.dnb.no/display/KKO/SwaggerHub%3A+REST+API+Design+tool\\#SwaggerHub:RESTAPIDesigntool-WayofWork)**      
