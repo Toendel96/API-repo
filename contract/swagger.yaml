@@ -1,0 +1,573 @@
+---
+swagger: "2.0"
+info:
+  description: "Some description here of the full API\n\nGitHub Flavored Markdown can be used for rich text representation,\n    such as **bold**, *italic* and [links](https://swagger.io).\n    \n    \n# Useful links for the tasks:\n\n* **[REST Design Guidelines V4](https://confluence.tech.dnb.no/pages/viewpage.action?pageId=33488367)**\n\n* **[SwaggerHub Way of Work](https://confluence.tech.dnb.no/display/KKO/SwaggerHub%3A+REST+API+Design+tool\\#SwaggerHub:RESTAPIDesigntool-WayofWork)**\n    \n"
+  version: 1.1.0
+  title: Filip´s API of Things
+host: apis.dnb.no
+basePath: /v1
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+security:
+- basic: []
+paths:
+  /things:
+    get:
+      summary: 'Short summary of the API Operation: ex: Get all things'
+      description: |
+        Description goes HERE
+
+        DNB naming convention: Root resource of API = Name of API.
+        Example: http://api.dnb.no/v1/accounts/ = Accounts API
+      parameters:
+      - name: X-DNBAPI-Trace-Id
+        in: header
+        description: |-
+          UUID (Universally Unique Identifier) version 4
+
+          Custom correlation-id to be able to correlate request / response. By logging this value on the client,
+          server and any backing services, it provides a mechanism to trace, diagnose and debug requests.
+        required: true
+        type: string
+        maxLength: 36
+        minLength: 36
+        pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+        x-example: 64d16ca4-582a-416e-90d0-e39246b59399
+      - name: X-DNBAPI-CustomHeader
+        in: header
+        description: Required custom header described
+        required: true
+        type: string
+      - name: X-DNBAPI-CustomHeader2
+        in: header
+        description: Optional custom header described
+        required: false
+        type: string
+      - name: field1
+        in: query
+        description: Query string parameter to narrow the list of things based on field1 value.
+        required: false
+        type: string
+      responses:
+        "200":
+          description: Success
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+          schema:
+            type: array
+            description: Array of things
+            items:
+              $ref: '#/definitions/Thing'
+        "400":
+          description: Bad Request
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal server error
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    post:
+      summary: 'Short summary of the API Operation: ex: Create one thing'
+      description: |
+        Description goes HERE
+      parameters:
+      - name: X-DNBAPI-Trace-Id
+        in: header
+        description: |-
+          UUID (Universally Unique Identifier) version 4
+
+          Custom correlation-id to be able to correlate request / response. By logging this value on the client,
+          server and any backing services, it provides a mechanism to trace, diagnose and debug requests.
+        required: true
+        type: string
+        maxLength: 36
+        minLength: 36
+        pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+        x-example: 64d16ca4-582a-416e-90d0-e39246b59399
+      - name: X-DNBAPI-CustomHeader
+        in: header
+        description: Required custom header described
+        required: true
+        type: string
+      - name: X-DNBAPI-CustomHeader2
+        in: header
+        description: Optional custom header described
+        required: false
+        type: string
+      - in: body
+        name: body
+        description: Description goes HERE
+        required: false
+        schema:
+          $ref: '#/definitions/PostThingRequest'
+      responses:
+        "201":
+          description: |
+            Successfully created.
+
+            Returns the newly created Thing.
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+          schema:
+            $ref: '#/definitions/Thing'
+        "400":
+          description: Bad Request
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal server error
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /things/{thingId}/special-thing:
+    get:
+      summary: 'Short summary of the API Operation: ex: Get one thing by objectId'
+      description: |
+        Description goes HERE
+      parameters:
+      - name: X-DNBAPI-Trace-Id
+        in: header
+        description: |-
+          UUID (Universally Unique Identifier) version 4
+
+          Custom correlation-id to be able to correlate request / response. By logging this value on the client,
+          server and any backing services, it provides a mechanism to trace, diagnose and debug requests.
+        required: true
+        type: string
+        maxLength: 36
+        minLength: 36
+        pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+        x-example: 64d16ca4-582a-416e-90d0-e39246b59399
+      - name: X-DNBAPI-CustomHeader
+        in: header
+        description: Required custom header described
+        required: true
+        type: string
+      - name: X-DNBAPI-CustomHeader2
+        in: header
+        description: Optional custom header described
+        required: false
+        type: string
+      - name: thingId
+        in: path
+        description: ID defining a specific Thing.
+        required: true
+        type: string
+      responses:
+        "200":
+          description: |
+            Success
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+          schema:
+            $ref: '#/definitions/Thing'
+        "400":
+          description: Bad Request
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal server error
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /things/{thingId}:
+    get:
+      summary: 'Short summary of the API Operation: ex: Get one thing by objectId'
+      description: |
+        Description goes HERE
+      parameters:
+      - name: thingId
+        in: path
+        description: ID defining a specific Thing.
+        required: true
+        type: string
+      - name: X-DNBAPI-Trace-Id
+        in: header
+        description: |-
+          UUID (Universally Unique Identifier) version 4
+
+          Custom correlation-id to be able to correlate request / response. By logging this value on the client,
+          server and any backing services, it provides a mechanism to trace, diagnose and debug requests.
+        required: true
+        type: string
+        maxLength: 36
+        minLength: 36
+        pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+        x-example: 64d16ca4-582a-416e-90d0-e39246b59399
+      - name: X-DNBAPI-CustomHeader
+        in: header
+        description: Required custom header described
+        required: true
+        type: string
+      - name: X-DNBAPI-CustomHeader2
+        in: header
+        description: Optional custom header described
+        required: false
+        type: string
+      responses:
+        "200":
+          description: |
+            Success
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+          schema:
+            $ref: '#/definitions/Thing'
+        "400":
+          description: Bad Request
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal server error
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    delete:
+      summary: 'Short summary of the API Operation: ex: Delete one thing by objectId'
+      description: |
+        Description goes HERE
+      parameters:
+      - name: thingId
+        in: path
+        description: ID defining a specific Thing.
+        required: true
+        type: string
+      - name: X-DNBAPI-Trace-Id
+        in: header
+        description: |-
+          UUID (Universally Unique Identifier) version 4
+
+          Custom correlation-id to be able to correlate request / response. By logging this value on the client,
+          server and any backing services, it provides a mechanism to trace, diagnose and debug requests.
+        required: true
+        type: string
+        maxLength: 36
+        minLength: 36
+        pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+        x-example: 64d16ca4-582a-416e-90d0-e39246b59399
+      - name: X-DNBAPI-CustomHeader
+        in: header
+        description: Required custom header described
+        required: true
+        type: string
+      - name: X-DNBAPI-CustomHeader2
+        in: header
+        description: Optional custom header described
+        required: false
+        type: string
+      responses:
+        "204":
+          description: |
+            Successfully deleted.
+
+            Alternatively: if the use case requires some information to be returned on delete.
+            Use HTTP 200 and include a response payload as needed.
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+        "400":
+          description: Bad Request
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal server error
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    patch:
+      summary: 'Short summary of the API Operation: ex: Update one thing by objectId'
+      description: |
+        Description goes HERE
+      parameters:
+      - name: thingId
+        in: path
+        description: ID defining a specific Thing.
+        required: true
+        type: string
+      - name: X-DNBAPI-Trace-Id
+        in: header
+        description: |-
+          UUID (Universally Unique Identifier) version 4
+
+          Custom correlation-id to be able to correlate request / response. By logging this value on the client,
+          server and any backing services, it provides a mechanism to trace, diagnose and debug requests.
+        required: true
+        type: string
+        maxLength: 36
+        minLength: 36
+        pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+        x-example: 64d16ca4-582a-416e-90d0-e39246b59399
+      - name: X-DNBAPI-CustomHeader
+        in: header
+        description: Required custom header described
+        required: true
+        type: string
+      - name: X-DNBAPI-CustomHeader2
+        in: header
+        description: Optional custom header described
+        required: false
+        type: string
+      - in: body
+        name: body
+        description: Description goes HERE
+        required: false
+        schema:
+          $ref: '#/definitions/PatchThingRequest'
+      responses:
+        "200":
+          description: |
+            Successfully updated.
+
+            Returns the updated Thing.
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+          schema:
+            $ref: '#/definitions/Thing'
+        "400":
+          description: Bad Request
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal server error
+          headers:
+            X-DNBAPI-Trace-Id:
+              type: string
+              minLength: 36
+              maxLength: 36
+              pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+securityDefinitions:
+  basic:
+    description: Basic HTTP Authentication
+    type: basic
+definitions:
+  ThingBase:
+    type: object
+    properties:
+      field1:
+        type: string
+        description: Description of field goes HERE
+      field2:
+        type: integer
+        description: Description of field goes HERE
+      field3:
+        type: number
+        description: Description of field goes HERE
+      field4:
+        type: string
+        description: Description of field goes HERE
+        enum:
+        - VAL1
+        - VAL2
+        - VAL3
+    description: |
+      The ThingBase object represents a common set of fields that are used in other objects.
+      The base object itself is not meant to be returned from the API.
+  Thing:
+    allOf:
+    - $ref: '#/definitions/ThingBase'
+    - type: object
+      properties:
+        thingId:
+          type: string
+          description: Thing identifier
+        field5:
+          type: string
+          format: date
+          example: 1999-04-15
+          description: Description goes HERE
+    description: |
+      Thing is inherited from ThingBase and adds several new fields. Required fields are those that are always set
+      when object is returned to the client
+  PostThingRequest:
+    allOf:
+    - $ref: '#/definitions/ThingBase'
+    - {}
+    description: |
+      PostThingRequest object is also inherited from the ThingBase object and only marks some fields as required
+  PatchThingRequest:
+    type: object
+    properties:
+      field2:
+        type: string
+        description: Description goes HERE
+      field3:
+        type: string
+        description: Description goes HERE
+    description: Description goes HERE
+  ErrorResponse:
+    type: object
+    required:
+    - message
+    - statusCode
+    properties:
+      statusCode:
+        type: string
+        description: |
+          Error code (determined on this API service): Any Errorcode important enough to need handling by consumer
+          should be promotoed to a specific status code value and shown in this field.
+      message:
+        type: string
+        description: Readable message associated with statuscode.
+      backendInfo:
+        type: array
+        description: |
+          Error responses from backend systems. This data is optional and can not be considered as always present.
+          Any errors that need custom handling should be promotoed to the required statusCode field
+        items:
+          $ref: '#/definitions/BackendResponse'
+    description: |
+      Object representing error on this API, with optional additional information from backend systems
+      for help in debugging/logging.
+  BackendResponse:
+    type: object
+    properties:
+      endPointUrl:
+        type: string
+        description: URL of endpoint giving the error
+      statusCode:
+        type: string
+        description: Error code of backend system
+      message:
+        type: string
+        description: Descriptive message to complemented the (sometime cryptic) backend error code.
+    description: |
+      Error information from the backend system consumed by the service providing this API.
+parameters:
+  X-DNBAPI-Trace-Id:
+    name: X-DNBAPI-Trace-Id
+    in: header
+    description: |-
+      UUID (Universally Unique Identifier) version 4
+
+      Custom correlation-id to be able to correlate request / response. By logging this value on the client,
+      server and any backing services, it provides a mechanism to trace, diagnose and debug requests.
+    required: true
+    type: string
+    maxLength: 36
+    minLength: 36
+    pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+    x-example: 64d16ca4-582a-416e-90d0-e39246b59399
+  X-DNBAPI-CustomHeader1:
+    name: X-DNBAPI-CustomHeader
+    in: header
+    description: Required custom header described
+    required: true
+    type: string
+  X-DNBAPI-CustomHeader2:
+    name: X-DNBAPI-CustomHeader2
+    in: header
+    description: Optional custom header described
+    required: false
+    type: string
+responses:
+  "400":
+    description: Bad Request
+    headers:
+      X-DNBAPI-Trace-Id:
+        type: string
+        minLength: 36
+        maxLength: 36
+        pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+    schema:
+      $ref: '#/definitions/ErrorResponse'
+  "500":
+    description: Internal server error
+    headers:
+      X-DNBAPI-Trace-Id:
+        type: string
+        minLength: 36
+        maxLength: 36
+        pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+    schema:
+      $ref: '#/definitions/ErrorResponse'
+x-serviceDomain: Domain of Things
